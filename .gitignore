@@ -1,0 +1,14 @@
+bin
+build
+include
+lib
+local
+man
+share
+Scripts
+.Python
+.idea
+*.pyc
+*~
+*.db
+.DS_Store"eventex/static" 
