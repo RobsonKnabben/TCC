@@ -1,11 +1,9 @@
 # coding: utf-8
 # Django settings for TCCweb project.
-
-import os
 import dj_database_url
 from unipath import Path
 
-AUTH_PROFILE_MODULE = 'core.userprofile'
+AUTH_PROFILE_MODULE = 'appAdmin.userprofile'
 PROJECT_DIR = Path(__file__).parent
 
 DEBUG = True
@@ -127,7 +125,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'TCCweb.core'
+    'TCCweb.appAdmin',
+    'TCCweb.api',
 )
 
 # A sample logging configuration. The only tangible logging

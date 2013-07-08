@@ -6,6 +6,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^api/', include('TCCweb.core.urls', namespace='core')),
+    url(r'^api/', include('TCCweb.api.urls', namespace='api')),
     url(r'^admin/', include(admin.site.urls)),
 )

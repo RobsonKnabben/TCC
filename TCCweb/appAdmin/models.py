@@ -2,8 +2,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
 from django.db.models.signals import post_save
 
 
@@ -86,7 +84,7 @@ class Produto(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    estabelecimento = models.OneToOneField(Estabelecimento, null=True, unique=True)
+    estabelecimento = models.OneToOneField(Estabelecimento, blank=True, unique=True)
 
 
 def create_user_profile(sender, instance, created, **kwargs):

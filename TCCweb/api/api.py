@@ -1,7 +1,7 @@
 # coding: utf-8
 from tastypie.resources import ModelResource
 from tastypie import fields
-from models import Ramo, Estabelecimento, Produto, Linha, Telefone
+from TCCweb.appAdmin.models import Ramo, Estabelecimento, Produto, Linha, Telefone
 
 
 class RamoResource(ModelResource):

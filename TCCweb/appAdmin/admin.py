@@ -1,9 +1,8 @@
 # coding: utf-8
-from django.utils.datetime_safe import datetime
-from django.utils.translation import ungettext, ugettext as _
+from symbol import return_stmt
 from django.contrib import admin
-from TCCweb.core.models import Estabelecimento, Produto, Linha, Telefone, Ramo, UserProfile
-from django.contrib.contenttypes import generic
+from TCCweb.appAdmin.models import Estabelecimento, Produto, Linha, Telefone, Ramo, UserProfile
+
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
