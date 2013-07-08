@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db.models.signals import post_save
 
+
 class Ramo(models.Model):
     name = models.CharField(_('Nome'), max_length=50, blank=False)
 
