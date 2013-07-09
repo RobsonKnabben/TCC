@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from tastypie.fields import OneToManyField
 
 
 class Ramo(models.Model):
@@ -20,15 +21,7 @@ class Ramo(models.Model):
 class Estabelecimento(models.Model):
     name = models.CharField(_('Nome'), max_length=50)
     description = models.TextField(_(u'Descrição'), max_length=200)
-    ramo = models.ManyToManyField(Ramo)
-
-    @property
-    def telefones(self):
-        return Telefone.objects.filter(estabelecimento=self)
-
-    @property
-    def produtos(self):
-        return Produto.objects.filter(estabelecimento=self)
+    ramo = models.ManyToManyField(Ramo, related_name='estabelecimentos')
 
     class Meta:
         ordering = [u'name']
@@ -41,7 +34,7 @@ class Estabelecimento(models.Model):
 
 class Telefone(models.Model):
     numero = models.CharField(_('Telefone'), max_length=20, blank=True)
-    estabelecimento = models.ForeignKey(Estabelecimento, editable=False)
+    estabelecimento = models.ForeignKey(Estabelecimento, related_name='telefones', editable=False)
 
     class Meta:
         ordering = [u'numero']
@@ -69,8 +62,8 @@ class Produto(models.Model):
     name = models.CharField(_('Nome'), max_length=50)
     description = models.TextField(_(u'Descrição'), max_length=200)
     price = models.DecimalField(_(u'Preço'), max_digits=12, decimal_places=2)
-    linha = models.ForeignKey(Linha)
-    estabelecimento = models.ForeignKey(Estabelecimento, editable=False)
+    linha = models.ForeignKey(Linha, related_name='produtos')
+    estabelecimento = models.ForeignKey(Estabelecimento, related_name='produtos', editable=False)
     inativo = models.BooleanField()
 
     class Meta:
