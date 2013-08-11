@@ -5,12 +5,12 @@ from TCCweb.appAdmin.models import Ramo, Estabelecimento, Produto, Linha, Telefo
 import copy
 
 class RamoResource(ModelResource):
-    estabelecimentos = fields.OneToManyField('TCCweb.api.api.EstabelecimentoResource', 'estabelecimentos', full=True)
+    # estabelecimentos = fields.OneToManyField('TCCweb.api.api.EstabelecimentoResource', 'estabelecimentos', full=True)
 
     class Meta:
         queryset=Ramo.objects.all()
         resource_name='ramos'
-        #fields = ['username', 'first_name', 'last_name', 'last_login']
+        fields = ['id', 'name']
         allowed_methods = ['get']
         include_resource_uri=False
 
@@ -19,11 +19,8 @@ class RamoResource(ModelResource):
     def alter_list_data_to_serialize(self, request, data_dict):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
-                # Get rid of the "meta".
                 del(data_dict['meta'])
-                # Rename the objects.
-                data_dict['ramos'] = copy.copy(data_dict['objects'])
-                del(data_dict['objects'])
+                data_dict = copy.copy(data_dict['objects'])
         return data_dict
 
     def determine_format(self, request):
@@ -31,24 +28,28 @@ class RamoResource(ModelResource):
 
 
 class EstabelecimentoResource(ModelResource):
-    produtos = fields.OneToManyField('TCCweb.api.api.ProdutoResource', 'produtos', full=True)
+    linhas = fields.OneToManyField('TCCweb.api.api.LinhaResource', 'linhas', full=True)
+    #produtos = fields.OneToManyField('TCCweb.api.api.ProdutoResource', 'produtos', full=True)
     telefones = fields.OneToManyField('TCCweb.api.api.TelefoneResource', 'telefones', full=True)
+    ramos = fields.OneToManyField('TCCweb.api.api.RamoResource', 'ramo', full=True)
 
     class Meta:
         queryset=Estabelecimento.objects.all()
         resource_name='estabelecimentos'
-        #fields = ['username', 'first_name', 'last_name', 'last_login']
+        fields = ['id', 'name', 'description',]
         allowed_methods = ['get']
         include_resource_uri=False
+        filtering = {
+            'id':('exact',),
+            'name':('exact',),
+            }
+
 
     def alter_list_data_to_serialize(self, request, data_dict):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
-                # Get rid of the "meta".
                 del(data_dict['meta'])
-                # Rename the objects.
-                data_dict['estabelecimentos'] = copy.copy(data_dict['objects'])
-                del(data_dict['objects'])
+                data_dict = copy.copy(data_dict['objects'])
         return data_dict
 
     def determine_format(self, request):
@@ -66,11 +67,8 @@ class TelefoneResource(ModelResource):
     def alter_list_data_to_serialize(self, request, data_dict):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
-                # Get rid of the "meta".
                 del(data_dict['meta'])
-                # Rename the objects.
-                data_dict['telefones'] = copy.copy(data_dict['objects'])
-                del(data_dict['objects'])
+                data_dict = copy.copy(data_dict['objects'])
         return data_dict
 
     def determine_format(self, request):
@@ -78,7 +76,7 @@ class TelefoneResource(ModelResource):
 
 
 class ProdutoResource(ModelResource):
-    linha = fields.OneToOneField('TCCweb.api.api.LinhaResource', 'linha', full=True)
+    #linha = fields.OneToOneField('TCCweb.api.api.LinhaResource', 'linha', full=True)
 
     class Meta:
         queryset=Produto.objects.all()
@@ -93,8 +91,9 @@ class ProdutoResource(ModelResource):
                 # Get rid of the "meta".
                 del(data_dict['meta'])
                 # Rename the objects.
-                data_dict['produtos'] = copy.copy(data_dict['objects'])
-                del(data_dict['objects'])
+                #data_dict['produtos'] = copy.copy(data_dict['objects'])
+                data_dict = copy.copy(data_dict['objects'])
+                #del(data_dict['objects'])
         return data_dict
 
     def determine_format(self, request):
@@ -102,6 +101,8 @@ class ProdutoResource(ModelResource):
 
 
 class LinhaResource(ModelResource):
+    #estabelecimento = fields.OneToOneField('TCCweb.api.api.EstabelecimentoResource', 'estabelecimento', full=True)
+    produtos = fields.OneToManyField('TCCweb.api.api.ProdutoResource', 'produtos', full=True)
     class Meta:
         queryset=Linha.objects.all()
         resource_name='linhas'
@@ -112,11 +113,8 @@ class LinhaResource(ModelResource):
     def alter_list_data_to_serialize(self, request, data_dict):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
-                # Get rid of the "meta".
                 del(data_dict['meta'])
-                # Rename the objects.
-                data_dict['linhas'] = copy.copy(data_dict['objects'])
-                del(data_dict['objects'])
+                data_dict = copy.copy(data_dict['objects'])
         return data_dict
 
     def determine_format(self, request):

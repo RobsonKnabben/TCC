@@ -47,7 +47,7 @@ class Telefone(models.Model):
 
 class Linha(models.Model):
     name = models.CharField(_('Nome'), max_length=50, blank=False)
-    estabelecimento = models.ForeignKey(Estabelecimento, editable=False)
+    estabelecimento = models.ForeignKey(Estabelecimento, related_name='linhas', editable=False)
 
     class Meta:
         ordering = [u'name']
@@ -77,7 +77,15 @@ class Produto(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    estabelecimento = models.OneToOneField(Estabelecimento, blank=True, unique=True)
+    estabelecimento = models.OneToOneField(Estabelecimento, related_name='perfil', null=True, blank=True, unique=True)
+
+    class Meta:
+        ordering = [u'user']
+        verbose_name = _(u'perfil')
+        verbose_name_plural = _(u'perfis')
+
+    def __unicode__(self):
+        return unicode(self.user)
 
 
 def create_user_profile(sender, instance, created, **kwargs):
