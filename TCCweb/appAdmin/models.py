@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from tastypie.fields import OneToManyField
 
 
 class Ramo(models.Model):
@@ -33,7 +32,7 @@ class Estabelecimento(models.Model):
 
 
 class Telefone(models.Model):
-    numero = models.CharField(_('Telefone'), max_length=20, blank=True)
+    numero = models.CharField(_('Telefone'), max_length=15, blank=True)
     estabelecimento = models.ForeignKey(Estabelecimento, related_name='telefones', editable=False)
 
     class Meta:

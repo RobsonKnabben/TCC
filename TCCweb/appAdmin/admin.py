@@ -4,6 +4,8 @@ from TCCweb.appAdmin.models import Estabelecimento, Produto, Linha, Telefone, Ra
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from django.contrib.localflavor.br.forms import BRPhoneNumberField
+from django.forms import ModelForm
 
 
 class TelefoneInline(admin.TabularInline):
@@ -30,8 +32,14 @@ class RamoAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
+class TelefoneForm(ModelForm):
+    numero = BRPhoneNumberField()
+
+    class Meta:
+        model = Telefone
 
 class TelefoneAdmin(admin.ModelAdmin):
+    form = TelefoneForm
     list_display = ('numero', 'estabelecimento')
     search_fields = ('numero',)
 
