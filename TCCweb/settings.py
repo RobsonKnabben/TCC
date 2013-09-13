@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'TCCweb.appAdmin',
     'TCCweb.api',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging

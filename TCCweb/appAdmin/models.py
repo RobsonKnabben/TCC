@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 
 class Ramo(models.Model):
     name = models.CharField(_('Nome'), max_length=50, blank=False)
+    deleted = models.BooleanField(editable=False)
 
     class Meta:
         ordering = [u'name']
@@ -21,6 +22,7 @@ class Estabelecimento(models.Model):
     name = models.CharField(_('Nome'), max_length=50)
     description = models.TextField(_(u'Descrição'), max_length=200)
     ramo = models.ManyToManyField(Ramo, related_name='estabelecimentos')
+    deleted = models.BooleanField(editable=False)
 
     class Meta:
         ordering = [u'name']
@@ -34,6 +36,7 @@ class Estabelecimento(models.Model):
 class Telefone(models.Model):
     numero = models.CharField(_('Telefone'), max_length=15, blank=True)
     estabelecimento = models.ForeignKey(Estabelecimento, related_name='telefones', editable=False)
+    deleted = models.BooleanField(editable=False)
 
     class Meta:
         ordering = [u'numero']
@@ -47,6 +50,7 @@ class Telefone(models.Model):
 class Linha(models.Model):
     name = models.CharField(_('Nome'), max_length=50, blank=False)
     estabelecimento = models.ForeignKey(Estabelecimento, related_name='linhas', editable=False)
+    deleted = models.BooleanField(editable=False)
 
     class Meta:
         ordering = [u'name']
@@ -64,6 +68,7 @@ class Produto(models.Model):
     linha = models.ForeignKey(Linha, related_name='produtos')
     estabelecimento = models.ForeignKey(Estabelecimento, related_name='produtos', editable=False)
     inativo = models.BooleanField()
+    deleted = models.BooleanField(editable=False)
 
     class Meta:
         ordering = [u'name']
