@@ -14,6 +14,12 @@ class TelefoneInline(admin.TabularInline):
     model = Telefone
     extra = 1
     varbose_name_plural = 'telefones'
+    can_delete = False
+
+    def queryset(self, request):
+        return super(TelefoneInline, self).queryset(request).filter(deleted=MOSTRAR_DELETED)
+
+
 
 
 class EstabelecimentoAdmin(admin.ModelAdmin):
