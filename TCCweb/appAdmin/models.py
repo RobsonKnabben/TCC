@@ -22,6 +22,7 @@ class Estabelecimento(models.Model):
     name = models.CharField(_('Nome'), max_length=50)
     description = models.TextField(_(u'Descrição'), max_length=200)
     ramo = models.ManyToManyField(Ramo, related_name='estabelecimentos')
+    inativo = models.BooleanField()
     deleted = models.BooleanField(editable=False)
 
     class Meta:

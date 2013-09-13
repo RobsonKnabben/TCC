@@ -8,7 +8,7 @@ class RamoResource(ModelResource):
     class Meta:
         queryset=Ramo.objects.all()
         resource_name='ramos'
-        fields = ['id', 'name', 'deleted']
+        fields = ['id', 'name', 'deleted',]
         allowed_methods = ['get']
         include_resource_uri=False
 
@@ -33,7 +33,7 @@ class EstabelecimentoResource(ModelResource):
     class Meta:
         queryset=Estabelecimento.objects.all()
         resource_name='estabelecimentos'
-        fields = ['id', 'name', 'description', 'deleted']
+        fields = ['id', 'name', 'description', 'inativo', 'deleted']
         allowed_methods = ['get']
         include_resource_uri=False
         filtering = {

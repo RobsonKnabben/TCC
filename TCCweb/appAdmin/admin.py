@@ -53,6 +53,13 @@ class EstabelecimentoAdmin(admin.ModelAdmin):
             return qs.filter(id=-1)
         return qs.filter(id=request.user.get_profile().estabelecimento.id, deleted=MOSTRAR_DELETED)
 
+    def get_form(self, request, obj=None, **kwargs):
+        self.exclude = []
+        if not request.user.is_superuser:
+            self.exclude.append('inativo')
+        return super(EstabelecimentoAdmin, self).get_form(request, obj, **kwargs)
+
+
     def delete_model(self, request, obj):
         obj.deleted=DELETAR
         for objeto in Produto.objects.all().filter(estabelecimento=obj):
