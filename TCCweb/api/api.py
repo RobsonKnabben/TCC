@@ -5,12 +5,10 @@ from TCCweb.appAdmin.models import Ramo, Estabelecimento, Produto, Linha, Telefo
 import copy
 
 class RamoResource(ModelResource):
-    # estabelecimentos = fields.OneToManyField('TCCweb.api.api.EstabelecimentoResource', 'estabelecimentos', full=True)
-
     class Meta:
         queryset=Ramo.objects.all()
         resource_name='ramos'
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'deleted']
         allowed_methods = ['get']
         include_resource_uri=False
 
@@ -29,21 +27,19 @@ class RamoResource(ModelResource):
 
 class EstabelecimentoResource(ModelResource):
     linhas = fields.OneToManyField('TCCweb.api.api.LinhaResource', 'linhas', full=True)
-    #produtos = fields.OneToManyField('TCCweb.api.api.ProdutoResource', 'produtos', full=True)
     telefones = fields.OneToManyField('TCCweb.api.api.TelefoneResource', 'telefones', full=True)
     ramos = fields.OneToManyField('TCCweb.api.api.RamoResource', 'ramo', full=True)
 
     class Meta:
         queryset=Estabelecimento.objects.all()
         resource_name='estabelecimentos'
-        fields = ['id', 'name', 'description',]
+        fields = ['id', 'name', 'description', 'deleted']
         allowed_methods = ['get']
         include_resource_uri=False
         filtering = {
             'id':('exact',),
             'name':('exact',),
             }
-
 
     def alter_list_data_to_serialize(self, request, data_dict):
         if isinstance(data_dict, dict):
@@ -76,8 +72,6 @@ class TelefoneResource(ModelResource):
 
 
 class ProdutoResource(ModelResource):
-    #linha = fields.OneToOneField('TCCweb.api.api.LinhaResource', 'linha', full=True)
-
     class Meta:
         queryset=Produto.objects.all()
         resource_name='produtos'
@@ -101,8 +95,8 @@ class ProdutoResource(ModelResource):
 
 
 class LinhaResource(ModelResource):
-    #estabelecimento = fields.OneToOneField('TCCweb.api.api.EstabelecimentoResource', 'estabelecimento', full=True)
     produtos = fields.OneToManyField('TCCweb.api.api.ProdutoResource', 'produtos', full=True)
+
     class Meta:
         queryset=Linha.objects.all()
         resource_name='linhas'

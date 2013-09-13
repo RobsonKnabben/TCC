@@ -8,7 +8,7 @@ from django.contrib.localflavor.br.forms import BRPhoneNumberField
 from django.forms import ModelForm
 
 DELETAR = True
-DELETED = True
+MOSTRAR_DELETED = False
 
 class TelefoneInline(admin.TabularInline):
     model = Telefone
@@ -17,7 +17,7 @@ class TelefoneInline(admin.TabularInline):
 
 
 class EstabelecimentoAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'deleted', )
+    list_display = ('name', 'description', )
     search_fields = ('name',)
     inlines = (TelefoneInline, )
 
@@ -42,10 +42,10 @@ class EstabelecimentoAdmin(admin.ModelAdmin):
     def queryset(self, request):
         qs = super(EstabelecimentoAdmin, self).queryset(request)
         if request.user.is_superuser:
-            return qs
+            return qs.filter(deleted=MOSTRAR_DELETED)
         elif not request.user.get_profile().estabelecimento:
             return qs.filter(id=-1)
-        return qs.filter(id=request.user.get_profile().estabelecimento.id, deleted=DELETED)
+        return qs.filter(id=request.user.get_profile().estabelecimento.id, deleted=MOSTRAR_DELETED)
 
     def delete_model(self, request, obj):
         obj.deleted=DELETAR
@@ -63,7 +63,7 @@ class EstabelecimentoAdmin(admin.ModelAdmin):
 
 
 class RamoAdmin(admin.ModelAdmin):
-    list_display = ('name', 'deleted',)
+    list_display = ('name',)
     search_fields = ('name',)
 
     actions = ['deletar_selecionados']
@@ -87,7 +87,7 @@ class RamoAdmin(admin.ModelAdmin):
 
     def queryset(self, request):
         qs = super(RamoAdmin, self).queryset(request)
-        return qs.filter(deleted=DELETED)
+        return qs.filter(deleted=MOSTRAR_DELETED)
 
 
     deletar_selecionados.short_description = "Remover itens selecionados"
@@ -118,7 +118,7 @@ class TelefoneForm(ModelForm):
 
 class TelefoneAdmin(admin.ModelAdmin):
     form = TelefoneForm
-    list_display = ('numero', 'estabelecimento', 'deleted',)
+    list_display = ('numero', 'estabelecimento',)
     search_fields = ('numero',)
 
     actions = ['deletar_selecionados']
@@ -132,7 +132,7 @@ class TelefoneAdmin(admin.ModelAdmin):
 
     def queryset(self, request):
         qs = super(TelefoneAdmin, self).queryset(request)
-        return qs.filter(estabelecimento=request.user.get_profile().estabelecimento, deleted=DELETED)
+        return qs.filter(estabelecimento=request.user.get_profile().estabelecimento, deleted=MOSTRAR_DELETED)
 
     def save_model(self, request, obj, form, change):
         if request.user.get_profile().estabelecimento:
@@ -145,7 +145,7 @@ class TelefoneAdmin(admin.ModelAdmin):
 
 
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'linha', 'price', 'inativo', 'deleted',)
+    list_display = ('name', 'description', 'linha', 'price', 'inativo',)
     search_fields = ('name',)
 
     actions = ['deletar_selecionados']
@@ -165,7 +165,7 @@ class ProdutoAdmin(admin.ModelAdmin):
 
     def queryset(self, request):
         qs = super(ProdutoAdmin, self).queryset(request)
-        return qs.filter(estabelecimento=request.user.get_profile().estabelecimento, deleted=DELETED)
+        return qs.filter(estabelecimento=request.user.get_profile().estabelecimento, deleted=MOSTRAR_DELETED)
 
     def save_model(self, request, obj, form, change):
         if request.user.get_profile().estabelecimento:
@@ -178,7 +178,7 @@ class ProdutoAdmin(admin.ModelAdmin):
 
 
 class LinhaAdmin(admin.ModelAdmin):
-    list_display = ('name', 'estabelecimento', 'deleted',)
+    list_display = ('name', 'estabelecimento',)
     search_fields = ('name',)
 
     actions = ['deletar_selecionados']
@@ -195,7 +195,7 @@ class LinhaAdmin(admin.ModelAdmin):
 
     def queryset(self, request):
         qs = super(LinhaAdmin, self).queryset(request)
-        return qs.filter(estabelecimento=request.user.get_profile().estabelecimento, deleted=DELETED)
+        return qs.filter(estabelecimento=request.user.get_profile().estabelecimento, deleted=MOSTRAR_DELETED)
 
     def save_model(self, request, obj, form, change):
         if request.user.get_profile().estabelecimento:
