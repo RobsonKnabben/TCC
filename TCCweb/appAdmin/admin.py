@@ -10,16 +10,23 @@ from django.forms import ModelForm
 DELETAR = True
 MOSTRAR_DELETED = False
 
+
+class TelefoneForm(ModelForm):
+    numero = BRPhoneNumberField()
+
+    class Meta:
+        model = Telefone
+
+
 class TelefoneInline(admin.TabularInline):
     model = Telefone
     extra = 1
-    varbose_name_plural = 'telefones'
+    verbose_name = 'telefones'
     can_delete = False
+    form = TelefoneForm
 
     def queryset(self, request):
         return super(TelefoneInline, self).queryset(request).filter(deleted=MOSTRAR_DELETED)
-
-
 
 
 class EstabelecimentoAdmin(admin.ModelAdmin):
@@ -120,13 +127,6 @@ class RamoAdmin(admin.ModelAdmin):
             for objeto in Telefone.objects.all().filter(estabelecimento=estabelecimento):
                 objeto.deleted=DELETAR
                 objeto.save()
-
-
-class TelefoneForm(ModelForm):
-    numero = BRPhoneNumberField()
-
-    class Meta:
-        model = Telefone
 
 
 class TelefoneAdmin(admin.ModelAdmin):
